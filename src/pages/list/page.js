@@ -17,7 +17,7 @@ function App(props) {
   );
 }
 
-export default connect(state => {
+export default connect((state) => {
   return {
     text: state.global.text,
   };

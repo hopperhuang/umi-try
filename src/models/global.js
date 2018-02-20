@@ -4,7 +4,7 @@ export default {
     text: 'hello umi+dva',
   },
   reducers: {
-    setText(state) {
+    setText() {
       return {
         text: 'setted',
       };

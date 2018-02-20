@@ -2,3 +2,8 @@
 .normal {
   color: green;
 }
+.rem {
+  width: 375px;
+  background-color: red;
+}
+  

@@ -3,8 +3,11 @@ import { connect } from 'dva';
 import { Button } from 'antd-mobile';
 import Count from './components/Count';
 import styles from './page.css';
+import api from 'Utis/api'
 
 function App(props) {
+  console.log(process.env.NODE_ENV)
+  console.log(api)
   return (
     <div className={styles.normal}>
       <h2>{props.text}</h2>
@@ -22,6 +25,16 @@ function App(props) {
       <br />
       <div>
         <Link to="/list">Go to list.html</Link>
+      </div>
+      <div
+        onClick={() => {
+          props.dispatch({
+            type: 'count/goToList'
+          })
+        }}
+        className={styles.rem}
+      >
+        click me to to list.html, too!!!
       </div>
     </div>
   );

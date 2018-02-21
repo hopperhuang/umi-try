@@ -9,6 +9,7 @@ export default {
     ],
     alias: {
         Utis: path.resolve(__dirname, 'src/utils/'),
+        Components: path.resolve(__dirname, 'src/components/'),
     },
     // html: {
     //     template: './src/index.ejs'

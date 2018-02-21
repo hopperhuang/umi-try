@@ -2,9 +2,12 @@ import Link from 'umi/link';
 import { connect } from 'dva';
 import { Button } from 'antd-mobile';
 import Count from './components/Count';
+import Tabbar from 'Components/Tabbar';
 import styles from './page.css';
 
 function App(props) {
+  const { location } = props
+  const { pathname } = location;
   return (
     <div className={styles.normal}>
       <h2>{props.text}</h2>
@@ -33,6 +36,9 @@ function App(props) {
       >
         click me to to list.html, too!!!
       </div>
+      <Tabbar
+        selectedKey={pathname}
+      />
     </div>
   );
 }

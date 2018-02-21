@@ -9,7 +9,7 @@ export default function() {
 <Router history={window.g_history}>
   <Switch>
     <Route exact path="/" component={require('../index/page.js').default}></Route>
-    <Route exact path="/list" component={() => <div>Compiling...</div>}></Route>
+    <Route exact path="/list" component={require('../list/page.js').default}></Route>
   </Switch>
 </Router>
   );

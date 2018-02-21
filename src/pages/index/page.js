@@ -3,11 +3,8 @@ import { connect } from 'dva';
 import { Button } from 'antd-mobile';
 import Count from './components/Count';
 import styles from './page.css';
-import api from 'Utis/api'
 
 function App(props) {
-  console.log(process.env.NODE_ENV)
-  console.log(api)
   return (
     <div className={styles.normal}>
       <h2>{props.text}</h2>

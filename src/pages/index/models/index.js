@@ -1,8 +1,11 @@
 import { routerRedux } from 'dva/router'
 
 export default {
-  namespace: 'count',
-  state: 0,
+  namespace: 'index',
+  state: {
+    loading: false,
+    banner: []
+  },
   reducers: {
     increase(state) {
       return state + 1;

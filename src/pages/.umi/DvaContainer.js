@@ -9,7 +9,7 @@ window.g_app = app;
 app.use(createLoading());
 
 app.model({ ...(require('../../models/global.js').default) });
-app.model({ ...(require('../../pages/index/models/count.js').default) });
+app.model({ ...(require('../../pages/index/models/index.js').default) });
 
 class DvaContainer extends Component {
   render() {

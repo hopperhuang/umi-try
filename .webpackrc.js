@@ -11,11 +11,13 @@ export default {
         Utis: path.resolve(__dirname, 'src/utils/'),
         Components: path.resolve(__dirname, 'src/components/'),
     },
-    // html: {
-    //     template: './src/index.ejs'
-    // },
-    // externals: {
-    //     "react": "window.React",
-    //     "react-dom": "window.ReactDOM"
-    // }
+    env: {
+        production: {
+            externals: {
+                'react': 'React',
+                'react-dom': 'ReactDOM',
+                'react-router-dom': 'ReactRouterDOM'
+            },
+        }
+    }
 }

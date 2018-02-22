@@ -25,7 +25,6 @@ function requestTool(url, options) {
         .then(parseJson)
         .then(data => ({ data }))
         .catch(err => ({ err }))
-        .then(result => console.log(result));
 }
 
 const baseHeader = {

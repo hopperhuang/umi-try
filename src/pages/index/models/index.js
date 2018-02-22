@@ -1,31 +1,48 @@
-import { routerRedux } from 'dva/router'
+import api from 'Utis/api'
+
+const { banner } = api;
+const { indexBanner } = banner;
 
 export default {
   namespace: 'index',
   state: {
     loading: false,
-    banner: []
+    banner: [],
   },
   reducers: {
-    increase(state) {
-      return state + 1;
+    changeLoading(state) {
+      state.loading = !state.loading;
+      return { ...state };
     },
-    decrease(state) {
-      return state - 1;
-    },
+    saveBanner(state, action) {
+      const { data } = action;
+      state.banner = data;
+      return { ...state };
+    }
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/') {
-          console.log('i am in index page')
+          console.log('now in index');
+          dispatch({ type: 'fetchData' });
         }
       });
     },
   },
   effects: {
-    *goToList(action, { put }) {
-      yield put(routerRedux.push('/list'))
+    *fetchData(action, { put, call }) {
+      yield put({ type: 'changeLoading' });
+      const requestResult = yield call(indexBanner, [3, 1]);
+      const _data = requestResult.data;
+      if (_data) { // 成功请求
+        const { data } = _data;
+        yield put({ type: 'saveBanner', data });
+      } else {
+        console.log(requestResult)
+        console.log('错误处理方案')
+      }
+      yield put({ type: 'changeLoading' });
     }
   }
 };

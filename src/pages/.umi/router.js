@@ -1,5 +1,6 @@
 import { Router as DefaultRouter, Route, Switch } from 'react-router-dom';
 import dynamic from 'umi/dynamic';
+import { routerRedux } from 'dva/router';
 
 
 const Router = window.g_CustomRouter || DefaultRouter;

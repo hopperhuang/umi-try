@@ -4,6 +4,11 @@ import { Button } from 'antd-mobile';
 import Count from './components/Count';
 import Tabbar from 'Components/Tabbar';
 import styles from './page.css';
+import Vconsole from 'vconsole'
+
+/* eslint-disable */
+const Vcon = new Vconsole()
+/* eslint-enable */
 
 function App(props) {
   const { location } = props

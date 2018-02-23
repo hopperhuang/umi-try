@@ -1,11 +1,4 @@
 
-.normal {
-  color: green;
-}
-.rem {
-  width: 375px;
-  background-color: red;
-}
 .carousel {
   width: 750px;
   box-sizing: border-box;
@@ -16,8 +9,14 @@
   border-radius: 20px;
   overflow: hidden;
 }
-
-:global(.pullContent)  {
+.waterFall {
+  width: 750px;
+  box-sizing: border-box;
+  padding: 0 30px;
+  margin-top: 20px;
+}
+.hot_title {
   width: 100%;
-  height: 500px;
+  text-align: center;
+  color: #333333;
 }

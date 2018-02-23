@@ -1,13 +1,16 @@
 import api from 'Utis/api'
 
-const { banner } = api;
+const { banner, index } = api;
 const { indexBanner } = banner;
+const { indexDetail } = index
 
 export default {
   namespace: 'index',
   state: {
     loading: false,
     banner: [],
+    detail: [],
+    page: 0,
   },
   reducers: {
     changeLoading(state) {
@@ -18,29 +21,50 @@ export default {
       const { data } = action;
       state.banner = data;
       return { ...state };
+    },
+    savaDetail(state, action) {
+      const { data } = action;
+      const detail = state.detail.concat(data);
+      return { ...state, detail }
     }
   },
   subscriptions: {
     setup({ dispatch, history }) {
       return history.listen(({ pathname, query }) => {
         if (pathname === '/') {
-          console.log('now in index');
           dispatch({ type: 'fetchData' });
         }
       });
     },
   },
   effects: {
-    *fetchData(action, { put, call }) {
+    *fetchData(action, { put, call, select }) {
       yield put({ type: 'changeLoading' });
-      const requestResult = yield call(indexBanner, [3, 1]);
-      const _data = requestResult.data;
-      if (_data) { // 成功请求
-        const { data } = _data;
-        yield put({ type: 'saveBanner', data });
+      // 获取当前页面信息
+      const index = yield select(state => state.index);
+      const { page } = index
+      const nextPage = page + 1;
+      // 并行发送请求
+      const detailRequest = indexDetail(1, nextPage, 6);
+      const bannerRequest = indexBanner(3, 1);
+      const result = yield call(() => {
+        return Promise.all([bannerRequest, detailRequest]);
+      })
+      // 判断请求是否全部成功。
+      let success = true
+      for (let index = 0; index < result.length; index++) {
+        const element = result[index];
+        if (!element.data) {
+          success = false;
+        }
+      }
+      if (success) {
+        const banner = result[0];
+        const detail = result[1];
+        yield put({ type: 'saveBanner', data: banner.data.data })
+        yield put({ type: 'savaDetail', data: detail.data.data.ret })
       } else {
-        console.log(requestResult)
-        console.log('错误处理方案')
+        console.log('ERROR!!!');
       }
       yield put({ type: 'changeLoading' });
     }

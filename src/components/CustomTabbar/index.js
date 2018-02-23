@@ -13,7 +13,6 @@ class CustomTabbar extends React.Component {
     }
     render() {
         const { selectedKey, configs } = this.props
-        console.log(selectedKey)
         return (
             <div
                 className="youdu_commonTabbarComtainer"

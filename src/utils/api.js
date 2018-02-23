@@ -104,6 +104,18 @@ const api = {
                 header,
             });
         }
+    },
+    index: {
+        indexDetail(type, page, size) {
+            const url = `/read/home/${type}/${page}/${size}`;
+            const method = 'GET';
+            const header = {};
+            return request({
+                url,
+                method,
+                header,
+            });
+        }
     }
 }
 

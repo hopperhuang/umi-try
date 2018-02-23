@@ -5,6 +5,7 @@ import Tabbar from 'Components/Tabbar';
 import Load from 'Components/Load';
 import styles from './page.css';
 import CustomCarousel from 'Components/Carousel/index';
+import CustomScrollView from 'Components/ScrollView/index'
 
 // import Vconsole from 'vconsole'
 
@@ -12,8 +13,10 @@ import CustomCarousel from 'Components/Carousel/index';
 // const Vcon = new Vconsole()
 /* eslint-enable */
 
+let i = 5;
+
 function App(props) {
-  console.log(props.model)
+  console.log(document.documentElement.clientWidth)
   const { location, model } = props
   const { pathname } = location;
   const { banner } = model;
@@ -24,14 +27,28 @@ function App(props) {
   }))
   return (
     <div className={styles.normal}>
-      <CustomCarousel
-        banner={banners}
-        config={{
-          autoplay: true,
-          infinite: true
+      <div className={styles.carousel} >
+        <CustomCarousel
+          banner={banners}
+          config={{
+            autoplay: true,
+            infinite: true
+          }}
+        />
+      </div>
+      <CustomScrollView
+        height="4rem"
+        scrollToEnd={() => {
+          i += 1;
+          console.log(i)
+          // const pullContent = document.querySelector('.pullContent')
+          document.querySelector('.pullContent').style.height = `${i}00px`;
         }}
-      />
-      <div>这里是首页</div>
+      >
+        <div className="pullContent" >
+          这里是下拉内容
+          </div>
+      </CustomScrollView>
       <Tabbar
         selectedKey={pathname}
       />

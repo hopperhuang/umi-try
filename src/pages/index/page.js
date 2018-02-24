@@ -48,7 +48,7 @@ function App(props) {
       {/* 瀑布流内容 */}
       <div className={styles.waterFall} >
         <WaterFall
-          scrollToEnd={() => { console.log(23333) }}
+          scrollToEnd={props.loadMore}
           height="9rem"
           dataGroup={details}
           renderItem={(data) => (<BookItem
@@ -71,14 +71,18 @@ class Page extends React.Component {
   constructor(props) {
     super(props);
     this.clickHandler = this.clickHandler.bind(this);
+    this.loadMore = this.loadMore.bind(this);
   }
   clickHandler(id, cover) {
     return () => {
       console.log(id, cover)
     }
   }
+  loadMore() {
+    this.props.dispatch({ type: 'index/requestDetail' })
+  }
   render() {
-    return (<App {...this.props} clickHandler={this.clickHandler} />);
+    return (<App {...this.props} clickHandler={this.clickHandler} loadMore={this.loadMore} />);
   }
 }
 

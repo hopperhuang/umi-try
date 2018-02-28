@@ -21,5 +21,14 @@
         <script type="text/javascript" src="https://unpkg.com/react-router-dom@4.2.0/umd/react-router-dom.min.js"></script>
         <% } %>
 </body>
-
+    <script>
+        function setFontSize() {
+            var width = document.documentElement.clientWidth;
+            var scale = width / 750;
+            var fontSize = 100 * scale;
+            document.documentElement.style.fontSize = fontSize + 'px';
+        }
+        setFontSize();
+        window.addEventListener('resize', setFontSize);
+    </script>
 </html>

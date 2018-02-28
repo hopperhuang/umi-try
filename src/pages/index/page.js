@@ -14,8 +14,6 @@ import BookItem from './components/BookItem/index';
 /* eslint-enable */
 
 
-
-
 function App(props) {
   const { location, model } = props
   const { pathname } = location;

@@ -17,6 +17,7 @@ window.g_history = createHistory({
   basename: window.routerBase,
 });
 
+
 // render
 function render() {
   const DvaContainer = require('./DvaContainer').default;

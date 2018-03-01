@@ -10,6 +10,7 @@ app.use(createLoading());
 
 app.model({ ...(require('../../models/global.js').default) });
 app.model({ ...(require('../../pages/index/models/index.js').default) });
+app.model({ ...(require('../../pages/readbooks/models/index.js').default) });
 
 class DvaContainer extends Component {
   render() {

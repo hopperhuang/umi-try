@@ -1,6 +1,7 @@
 
 import * as React from 'react';
 import { connect } from 'dva';
+import router from 'umi/router';
 import Tabbar from 'Components/Tabbar';
 import Load from 'Components/Load';
 import styles from './page.css';
@@ -69,7 +70,13 @@ class Page extends React.Component {
   }
   clickHandler(id, cover) {
     return () => {
-      console.log(id, cover)
+      router.push({
+        pathname: '/readbooks',
+        query: {
+          id,
+          cover,
+        }
+      })
     }
   }
   loadMore() {

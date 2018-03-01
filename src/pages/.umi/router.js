@@ -14,6 +14,7 @@ export default function() {
   <Switch>
     <Route exact path="/" component={require('../index/page.js').default} />
     <Route exact path="/list" component={require('../list/page.js').default} />
+    <Route exact path="/readbooks" component={require('../readbooks/page.js').default} />
   </Switch>
 </Router>
   );

@@ -9,6 +9,7 @@ export default {
     ],
     alias: {
         Utis: path.resolve(__dirname, 'src/utils/'),
+        ModelUtils: path.resolve(__dirname, 'src/modelUtils/'),
         Components: path.resolve(__dirname, 'src/components/'),
     },
     env: {

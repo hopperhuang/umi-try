@@ -7,11 +7,7 @@ import styles from './page.css';
 import CustomCarousel from 'Components/Carousel/index';
 import WaterFall from 'Components/WaterFall/index';
 import BookItem from './components/BookItem/index';
-// import Vconsole from 'vconsole'
 
-/* eslint-disable */
-// const Vcon = new Vconsole()
-/* eslint-enable */
 
 
 function App(props) {

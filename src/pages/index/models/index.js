@@ -13,11 +13,16 @@ export default {
     banner: [],
     detail: [],
     page: 0,
+    init: false,
   },
   reducers: {
     changeLoading(state) {
       state.loading = !state.loading;
       return { ...state };
+    },
+    changeInit(state) {
+      state.init = true;
+      return { ...state }
     },
     saveBanner(state, action) {
       const { data } = action;
@@ -45,8 +50,9 @@ export default {
       yield put({ type: 'changeLoading' });
       // 获取当前页面信息
       const index = yield select(state => state.index);
-      const { page } = index
-      const nextPage = page + 1;
+      const { page, init } = index;
+      if (!init) {
+        const nextPage = page + 1;
       // 并行发送请求
       const detailRequest = indexDetail(1, nextPage, 6);
       const bannerRequest = indexBanner(3, 1);
@@ -68,6 +74,8 @@ export default {
         yield put({ type: 'savaDetail', data: detail.data.data.ret });
       } else {
         console.log('FETCHDATA ERROR!!!');
+      }
+      yield put({ type: 'changeInit' });
       }
       yield put({ type: 'changeLoading' });
     },

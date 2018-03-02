@@ -24,7 +24,7 @@ class ScrollView extends React.Component {
         const { scrollHeight, scrollTop, clientHeight } = this.scrollContainer;
         const { scrollToEnd } = this.props
         const method = () => {
-            if (scrollHeight === scrollTop + clientHeight) {
+            if (scrollHeight < scrollTop + clientHeight + 10) {
                 console.log('to the bottem')
                 if (scrollToEnd) {
                     scrollToEnd()

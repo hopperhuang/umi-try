@@ -48,6 +48,7 @@ function App(props) {
           dataGroup={details}
           renderItem={(data) => (<BookItem
             key={data.id}
+            id={data.id}
             name={data.name}
             cover={data.cover}
             clickHandler={() => { props.clickHandler(data.id, data.cover)() }}

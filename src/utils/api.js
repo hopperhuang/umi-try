@@ -116,7 +116,29 @@ const api = {
                 header,
             });
         }
-    }
+    },
+    detail: {
+        allChapter(id) {
+            const url = `/read/chapter/${id}`;
+            const method = 'GET';
+            const header = {};
+            return request({
+                url,
+                method,
+                header,
+            });
+        },
+        chapterContent(bookId, type, chapterId) {
+            const url = `/read/book/${bookId}/${type}/${chapterId}`
+            const method = 'GET';
+            const header = {};
+            return request({
+                url,
+                method,
+                header,
+            })
+        }
+    },
 }
 
 export default api

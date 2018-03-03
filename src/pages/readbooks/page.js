@@ -9,11 +9,11 @@ import styles from './style.less';
 
 
 function ReadBooks(props) {
-    console.log(props.showContent)
+    console.log(props.isEnd);
     return (
         <div className={styles.readbooksContainer} >
             <Nav title={props.title} onLeftClick={props.goBack } />
-            <div className={styles.contentContainer} onClick={props.setLoaction}  >
+            <div style={{ minHeight: document.documentElement.clientHeight}} className={styles.contentContainer} onClick={props.setLoaction}  >
                 {props.showContent.map(element => (<Content
                     key={element.content_id}
                     id={element.content_id}
@@ -24,6 +24,11 @@ function ReadBooks(props) {
                     avatar={element.role.role_avatar_img}
                 />))}
             </div>
+            {props.isEnd ? 
+                <div className={styles.readNextContainer} >
+                    <div className={styles.readNextButton} >阅读下一章节</div>
+                </div> : 
+            ''}
         </div>
     )
 }
@@ -37,17 +42,35 @@ class App extends React.Component {
             location: 1
         }
     }
-    shouldComponentUpdate(nextProps, nextState) {
-        return this.state.location !== nextState.location;
-    }
+    // shouldComponentUpdate(nextProps, nextState) {
+    //     return this.state.location !== nextState.location;
+    // }
     setLoaction() {
         const { location } = this.state;
         const { content } = this.props.model.chapter.ret;
         const { length } = content;
+        const self = this;
         if (location < length) {
              this.setState({
                  location: location + 1,
+             }, () => {
+                 // 将页面下拉到底部。
+                window.scrollTo(0,document.body.scrollHeight);
              })
+        } else {
+            const { isEnd } = this.state;
+            if (!isEnd) {
+                this.props.dispatch({
+                    type: 'readbooks/getNext',
+                }).then(() => {
+                    self.setState({
+                        isEnd: true,
+                    }, () => {
+                        // 将页面下拉到底部。
+                        window.scrollTo(0, document.body.scrollHeight);
+                    });
+                });
+            }
         }
     }
     goBack() {
@@ -60,7 +83,7 @@ class App extends React.Component {
         const chapterInfo = ret.chapter;
         const title = `${chapterInfo.chapter_name}章`;
         const { content } = ret;
-        const { location } = this.state;
+        const { location , isEnd } = this.state;
         const show = content.slice(0, location)
         return (
             <ReadBooks
@@ -69,6 +92,7 @@ class App extends React.Component {
                 goBack={this.goBack}
                 title={title}
                 showContent={show}
+                isEnd={isEnd}
             />
         )
     }

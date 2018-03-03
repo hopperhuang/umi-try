@@ -137,6 +137,16 @@ const api = {
                 method,
                 header,
             })
+        },
+        bookDetail(bookId, token) {
+            const url = `/get/book-detail/${bookId}`;
+            const method = 'GET';
+            const header = token ? { 'authorizationCode': token } : {};
+            return request({
+                url,
+                method,
+                header,
+            })
         }
     },
 }

@@ -10,7 +10,8 @@ export default {
   namespace: 'global',
   state: {
     text: 'hello umi+dva',
-    books: {}
+    books: {},
+    detail: {},
   },
   subscriptions: {
     setup() {
@@ -26,8 +27,13 @@ export default {
       };
     },
     savebooks(state, action) {
-      const { id, chapters } = action
+      const { id, chapters } = action;
       state.books[id] = chapters;
+      return { ...state };
+    },
+    saveDetail(state, action) {
+      const { id, detail } = action;
+      state.detail[id] = detail;
       return { ...state };
     }
   },

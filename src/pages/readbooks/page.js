@@ -9,10 +9,9 @@ import styles from './style.less';
 
 
 function ReadBooks(props) {
-    console.log(props.nextBookCover);
     return (
         <div className={styles.readbooksContainer} >
-            <Nav title={props.title} onLeftClick={props.goBack } />
+            <Nav title={props.title} onLeftClick={props.goBack} />
             <div style={{ minHeight: document.documentElement.clientHeight}} className={styles.contentContainer} onClick={props.setLoaction}  >
                 {props.showContent.map(element => (<Content
                     key={element.content_id}
@@ -33,8 +32,9 @@ function ReadBooks(props) {
                         backgroundRepeat: 'no-repeat',
                         backgroundSize: '100% auto', 
                     }}
-                >
-                    <div className={styles.readNextButton} >继续阅读</div>
+                >   
+                    <div className={styles.nextTitle} >{props.nextBookName}</div>
+                    <div onClick={props.readNext} className={styles.readNextButton} >继续阅读</div>
                 </div> : 
             ''}
         </div>
@@ -46,6 +46,7 @@ class App extends React.Component {
         super(props)
         this.goBack = this.goBack.bind(this);
         this.setLoaction = this.setLoaction.bind(this);
+        this.readNext = this.readNext.bind(this);
         this.state = {
             location: 1
         }
@@ -66,6 +67,7 @@ class App extends React.Component {
                 window.scrollTo(0,document.body.scrollHeight);
              })
         } else {
+            // 结束了则拉取下一章书的基本信息
             const { isEnd } = this.state;
             if (!isEnd) {
                 this.props.dispatch({
@@ -81,12 +83,22 @@ class App extends React.Component {
             }
         }
     }
+    readNext() {
+        const { nextBookId, nextChapterId } = this.props.model;
+        router.push({
+            pathname: '/readbooks',
+            query: {
+              id: nextBookId,
+              chapterId: nextChapterId,
+            }
+          })
+    }
     goBack() {
         router.push('/');
     }
     render() {
         const { model } = this.props;
-        const { chapter, nextBookCover } = model
+        const { chapter, nextBookCover, nextBookName } = model
         const { ret } = chapter;
         const chapterInfo = ret.chapter;
         const title = `${chapterInfo.chapter_name}章`;
@@ -97,11 +109,13 @@ class App extends React.Component {
             <ReadBooks
                 {...this.props}
                 setLoaction={this.setLoaction}
+                readNext={this.readNext}
                 goBack={this.goBack}
                 title={title}
                 showContent={show}
                 isEnd={isEnd}
                 nextBookCover={nextBookCover}
+                nextBookName={nextBookName}
             />
         )
     }

@@ -1,3 +1,4 @@
+// checker只判断网络请求是否成功。
 export default function check(success, fail) {
     return function* (result, sagaEffects) {
         let isSuccess = true;

@@ -108,9 +108,15 @@ function getNextSuccess(next) {
 
 // 获取下一章节详细信息
 function* getNextDetail(bookId, chapterId, sagaEffects) {
-    const { put } = sagaEffects;
+    const { put, select } = sagaEffects;
     yield compose([readbooksModel.getBookDeatil, readbooksModel.bookDetailChecker])(bookId, sagaEffects);
-    yield put({ type: 'saveNext', bookId, chapterId})
+    const global = yield select(state => state.global);
+    const { detail } = global;
+    const targetDetail = detail[bookId];
+    const _data = targetDetail.data;
+    const { data } = _data;
+    const { book_cover } = data;
+    yield put({ type: 'saveNext', bookId, chapterId, bookCover: book_cover });
 }
 
 function* bookDetailSuccess(detail, sagaEffects) {
@@ -139,8 +145,8 @@ export default {
             const { pathname, query } = location;
             // 从首页入口进入初始化
             if (pathname === '/readbooks') {
-                const { id, cover } = query;
-                if (!!id && !!cover) {
+                const { id } = query;
+                if (!!id) {
                     dispatch({
                         type: 'fetchData',
                         id,
@@ -155,8 +161,8 @@ export default {
             return { ...state, chapter };
         },
         saveNext(state, action) {
-            const { chapterId, bookId } = action;
-            return { ...state, nextBookId: bookId, nextChapterId: chapterId };
+            const { chapterId, bookId, bookCover } = action;
+            return { ...state, nextBookId: bookId, nextChapterId: chapterId, nextBookCover: bookCover };
         }
     },
     effects: {

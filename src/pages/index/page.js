@@ -75,7 +75,6 @@ class Page extends React.Component {
         pathname: '/readbooks',
         query: {
           id,
-          cover,
         }
       })
     }

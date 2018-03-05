@@ -9,7 +9,7 @@ import styles from './style.less';
 
 
 function ReadBooks(props) {
-    console.log(props.isEnd);
+    console.log(props.nextBookCover);
     return (
         <div className={styles.readbooksContainer} >
             <Nav title={props.title} onLeftClick={props.goBack } />
@@ -25,8 +25,16 @@ function ReadBooks(props) {
                 />))}
             </div>
             {props.isEnd ? 
-                <div className={styles.readNextContainer} >
-                    <div className={styles.readNextButton} >阅读下一章节</div>
+                <div
+                    className={styles.readNextContainer}
+                    style={{
+                        backgroundImage: `url(${props.nextBookCover})`,
+                        backgroundColor: '#000000',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: '100% auto', 
+                    }}
+                >
+                    <div className={styles.readNextButton} >继续阅读</div>
                 </div> : 
             ''}
         </div>
@@ -78,7 +86,7 @@ class App extends React.Component {
     }
     render() {
         const { model } = this.props;
-        const { chapter } = model
+        const { chapter, nextBookCover } = model
         const { ret } = chapter;
         const chapterInfo = ret.chapter;
         const title = `${chapterInfo.chapter_name}章`;
@@ -93,6 +101,7 @@ class App extends React.Component {
                 title={title}
                 showContent={show}
                 isEnd={isEnd}
+                nextBookCover={nextBookCover}
             />
         )
     }

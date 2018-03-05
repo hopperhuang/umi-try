@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router'; 
 import Load from 'Components/Load';
-import Nav from './components/navbar/index';
+import Nav from 'Components/Navbar/index';
 import Content from './components/content/index';
 import styles from './style.less';
 

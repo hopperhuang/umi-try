@@ -9,7 +9,7 @@ import check from './check';
 const { detail } = api;
 const { allChapter, chapterContent, bookDetail } = detail;
 
-const readbooksModel = {
+export const readbooksModel = {
     // 获取书本所有内容
     fetchBookChapter(next) {
         return function* (action, sagaEffects) {
@@ -75,7 +75,7 @@ const readbooksModel = {
 }
 
 // 成功获取书本所有章节回调
-function allChapterSuccess(next) {
+export function allChapterSuccess(next) {
     return function* (result, sagaEffects) {
         const { put } = sagaEffects
         const _data = result.data;
@@ -185,6 +185,9 @@ export default {
                         chapterId,
                         bookType: 'current',
                     });
+                }   else { // 参数错误，返回首页。
+                    router.push('/');
+                    Toast.info('参数错误');
                 }
             }
         }),

@@ -94,7 +94,13 @@ class App extends React.Component {
           })
     }
     goBack() {
-        router.push('/');
+        const { id } = this.props.location.query;
+        router.push({
+            pathname: '/catalog',
+            query: {
+                id,
+            },
+        });
     }
     render() {
         const { model } = this.props;

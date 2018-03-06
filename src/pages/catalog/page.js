@@ -15,7 +15,7 @@ function Catalog(props) {
                     <CatalogItem
                         key={element.chapter_id}
                         name={`${element.chapter_name}章`}
-                        clickButton={() => console.log('233333')}
+                        clickButton={() => props.readBook(element.book_id, element.chapter_id) }
                     />
                 ))}
             </div>
@@ -27,15 +27,25 @@ class Pages extends React.Component {
     constructor(props) {
         super(props);
         this.goBack = this.goBack.bind(this);
+        this.readBook = this.readBook.bind(this);
     }
     goBack() {
         router.push('/')
+    }
+    readBook(id, chapterId) {
+        router.push({
+            pathname: '/readbooks',
+            query: {
+                id,
+                chapterId
+            },
+        })
     }
     render() {
         const { model } = this.props;
         const { chapters } = model;
         return (
-            <Catalog {...this.props} goBack={this.goBack} chapters={chapters} />
+            <Catalog {...this.props} goBack={this.goBack} chapters={chapters} readBook={this.readBook} />
         )
     }
 }

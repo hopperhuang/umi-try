@@ -72,7 +72,7 @@ class Page extends React.Component {
   clickHandler(id, cover) {
     return () => {
       router.push({
-        pathname: '/readbooks',
+        pathname: '/catalog',
         query: {
           id,
         }

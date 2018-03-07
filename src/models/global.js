@@ -1,3 +1,8 @@
+import api from 'Utis/api';
+
+const { login } = api;
+const { telLogin } = login;
+
 // import Vconsole from 'vconsole'
 
 // function initVconsole() {
@@ -9,7 +14,7 @@
 export default {
   namespace: 'global',
   state: {
-    text: 'hello umi+dva',
+    login: false,
     books: {},
     detail: {},
   },
@@ -37,4 +42,13 @@ export default {
       return { ...state };
     }
   },
+  effects: {
+    *login(action, { call } ) {
+      const { number, code } = action;
+      const result = yield call(telLogin, number, code);
+      console.log(result);
+      yield console.log(number);
+      yield console.log(code);
+    }
+  }
 };

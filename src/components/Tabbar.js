@@ -15,9 +15,9 @@ const configs = [
     {
         title: '我的',
         key: 'my',
-        ownKey: '/list',
+        ownKey: '/my',
         pressed() {
-            router.push('/list')
+            router.push('/my')
         },
         icon: 'https://zos.alipayobjects.com/rmsportal/psUFoAMjkCcjqtUCNPxB.svg',
         selectedIcon: 'https://zos.alipayobjects.com/rmsportal/IIRLrXXrFAhXVdhMWgUI.svg'

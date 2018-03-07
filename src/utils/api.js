@@ -149,6 +149,33 @@ const api = {
             })
         }
     },
+    login: {
+        telLogin(phoneNumber, code) {
+            const url = '/login/tel';
+            const method = 'POST';
+            const header = {};
+            const body = {
+                tel: phoneNumber,
+                tel_code: code,
+            };
+            return request({
+                url,
+                method,
+                header,
+                body,
+            });
+        },
+        getCode(phone) {
+            const url = `/login/get-code/${phone}`;
+            const method = 'GET';
+            const header = {};
+            return request({
+                url,
+                method,
+                header,
+            });
+        }
+    }
 }
 
 export default api

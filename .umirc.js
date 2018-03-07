@@ -4,4 +4,5 @@ export default {
   context: {
     title: 'Try Umi Page',
   },
+  // "exportStatic": {},
 };

@@ -54,6 +54,7 @@ const AppWithLoad = Load(Pages);
 export default connect((state) => {
     return {
       loading: state.catalog.loading,
-      model: state.catalog
+      model: state.catalog,
+      globalLoading: state.global.loading,
     };
   })(AppWithLoad);

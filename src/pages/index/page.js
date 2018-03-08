@@ -92,6 +92,7 @@ const AppWithLoad = Load(Page);
 export default connect((state) => {
   return {
     loading: state.index.loading,
-    model: state.index
+    model: state.index,
+    globalLoading: state.global.loading,
   };
 })(AppWithLoad);

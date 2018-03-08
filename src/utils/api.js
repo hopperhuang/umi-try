@@ -103,6 +103,18 @@ const api = {
                 method,
                 header,
             });
+        },
+        info(token) {
+            const url = '/my/info';
+            const method = 'GET';
+            const header = {
+                'authorizationCode': token,
+            };
+            return request({
+                url,
+                method,
+                header,
+            });
         }
     },
     index: {

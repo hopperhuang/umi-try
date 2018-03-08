@@ -4,6 +4,7 @@ import router from 'umi/router';
 import Tabbar from 'Components/Tabbar';
 import Unlogin from './components/unlogin/index'
 import Nav from 'Components/Navbar/index';
+import Load from 'Components/Load';
 import api from 'Utis/api';
 import styles from './page.css';
 
@@ -50,17 +51,20 @@ class My extends React.Component {
   }
   getCode() {
     const { number } = this.state;
-    api.login.getCode(number);
+    const _number = number.split(' ').join('');
+    api.login.getCode(_number);
   }
   goBack() {
     router.push('/');
   }
   login() {
     const { number, code } = this.state;
+    const _number = number.split(' ').join('');
+    const _code = code.split(' ').join('')
     this.props.dispatch({
       type: 'global/login',
-      number,
-      code,
+      number: _number,
+      code: _code
     });
   }
   render() {
@@ -79,8 +83,11 @@ class My extends React.Component {
   }
 }
 
+const AppWithLoad = Load(My);
+
 export default connect((state) => {
   return {
     login: state.global.login,
+    globalLoading: state.global.loading,
   };
-})(My);
+})(AppWithLoad);

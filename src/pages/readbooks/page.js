@@ -132,6 +132,7 @@ const AppWithLoad = Load(App);
 export default connect((state) => {
     return {
       loading: state.readbooks.loading,
-      model: state.readbooks
+      model: state.readbooks,
+      globalLoading: state.global.loading,
     };
   })(AppWithLoad);

@@ -1,7 +1,8 @@
 const path = require('path')
 export default {
     define: {
-        APPURL: process.env.NODE_ENV === 'development' ? 'http://test.api.youdustory.com' : 'https://api.youdustory.com'
+        APPURL: process.env.NODE_ENV === 'development' ? 'http://test.api.youdustory.com' : 'https://api.youdustory.com',
+        // APPURL: 'https://api.youdustory.com'
     },
     browserslist: [
         "> 1%",

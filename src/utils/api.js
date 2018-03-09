@@ -35,14 +35,9 @@ const baseHeader = {
 }
 
 function transFormObjectToFormData(object) {
-    const keys = Object.keys(object)
-    const formData = new FormData();
-    for (let index = 0; index < keys.length; index++) {
-        const key = keys[index];
-        const value = object[key];
-        formData.append(key, value);
-    }
-    return formData;
+    // 必须对body进行序列化，否则body会存在webkitformboundary，服务器不能读取
+    const formBody = Object.keys(object).map(key=>encodeURIComponent(key)+'='+encodeURIComponent(object[key])).join('&');
+    return formBody;
 }
 
 // prams是一个object
@@ -59,7 +54,7 @@ function request(params) {
     if (method === 'POST') {// post请求需要设置contentType
         // fromData存在，contentType 为application/x-www-form-urlencoded
         if (body) {
-            const contentType = 'application/x-www-form-urlencoded';
+            const contentType = 'application/x-www-form-urlencoded; charset=UTF-8';
             finalHeader = { ...initHeader, 'Content-Type': contentType };
         } else { // formDate不存在, contentType为applicaiont/json
             const contentType = 'application/json';
@@ -109,6 +104,18 @@ const api = {
             const method = 'GET';
             const header = {
                 'authorizationCode': token,
+            };
+            return request({
+                url,
+                method,
+                header,
+            });
+        },
+        getReadHistory(token, page, size) {
+            const url = `/my/book/read-record/${page}/${size}`
+            const method = 'GET';
+            const header = {
+                'authorizationCode': token, 
             };
             return request({
                 url,

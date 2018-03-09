@@ -15,7 +15,7 @@ function App(props) {
   return (
     <div className={styles.my}>
       <Nav title="我的" onLeftClick={props.goBack} />
-      {props.login ? <Login logout={props.logout} /> :
+      {props.login ? <Login goToHistory={props.goToHistory} logout={props.logout} /> :
         <Unlogin
           inputChane={props.setNumber}
           onButtonClick={props.getCode}
@@ -40,6 +40,7 @@ class My extends React.Component {
     this.getCode = this.getCode.bind(this);
     this.login = this.login.bind(this);
     this.logout = this.logout.bind(this);
+    this.goToHistory = this.goToHistory.bind(this);
   }
   setNumber(number) {
     this.setState({
@@ -59,10 +60,13 @@ class My extends React.Component {
   goBack() {
     router.push('/');
   }
+  goToHistory() {
+    router.push('/history');
+  }
   login() {
     const { number, code } = this.state;
-    const _number = number.split(' ').join('');
-    const _code = code.split(' ').join('')
+    const _number = Number.parseInt(number.split(' ').join(''), 10);
+    const _code =  Number.parseInt(code.split(' ').join(''), 10);
     this.props.dispatch({
       type: 'global/login',
       number: _number,
@@ -86,6 +90,7 @@ class My extends React.Component {
         getCode={this.getCode}
         loginMethod={this.login}
         logout={this.logout}
+        goToHistory={this.goToHistory}
       />
     )
   }

@@ -5,7 +5,7 @@ export default function Login(props) {
     return (
         <div className={styles.loginContainer} >
         <WhiteSpace />
-        <Button onClick={props.logout} type="primary" >阅读历史</Button>
+        <Button onClick={props.goToHistory} type="primary" >阅读历史</Button>
         <WhiteSpace />
         <Button onClick={props.logout} type="warning" >退出登录</Button>
         </div>

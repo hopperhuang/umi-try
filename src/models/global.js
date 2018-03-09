@@ -2,6 +2,7 @@ import api from 'Utis/api';
 import compose from 'ModelUtils/compose';
 import { Toast } from 'antd-mobile';
 import check from 'ModelUtils/check';
+import checkResultCode from 'ModelUtils/checkCode'
 import fetchSell from 'ModelUtils/fetchData';
 import Vconsole from 'vconsole'
 
@@ -67,23 +68,25 @@ function checkLogin(next) {
   }
 }
 
-function* checkUserInfo(result, sagaEffects) {
-  const { put } = sagaEffects;
-  const { data } = result;
-  const { code } = data;
-  if (code === 200) {
-    const _data = data.data;
-    const { info } = _data;
-    yield put({ type: 'changeLoginToTrue' });
-    yield put({ type: 'saveLoginInfo', user: info });
-    // yield put({ type: 'changHasCheckLoginToTrue' });
-  } else {
-    localStorage.removeItem('token');
-    yield put({ type: 'changeLoginTofalse'});
-    // yield put({ type: 'changHasCheckLoginToTrue' });
+const checkUserInfo = compose([
+  checkResultCode,
+  {
+    *success(result, sagaEffects) {
+      const { put } = sagaEffects;
+      const { data } = result;
+      const _data = data.data;
+      const { info } = _data;
+      yield put({ type: 'changeLoginToTrue' });
+      yield put({ type: 'saveLoginInfo', user: info });
+    },
+    *fail(result, sagaEffects) {
+      const { put } = sagaEffects;
+      localStorage.removeItem('token');
+      yield put({ type: 'changeLoginTofalse'});
+    }
   }
-  // yield put({ type: 'changHasCheckLoginToTrue' });
-}
+])
+
 
 
 export default {
@@ -97,7 +100,8 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       if (process.env.NODE_ENV  === 'development') {
-        initVconsole();
+        // initVconsole();
+        console.log(initVconsole)
       }
       return history.listen((location) => {
         dispatch({

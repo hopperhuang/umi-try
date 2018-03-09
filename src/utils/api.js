@@ -187,6 +187,27 @@ const api = {
                 header,
             });
         }
+    },
+    report: {
+        readrecord(token, time, book_id, chapter_id, content_id) {
+            const url = '/reported/content/read-record';
+            const method = 'POST';
+            const header = {
+                'authorizationCode': token,
+            };
+            const body = {
+                time,
+                book_id,
+                chapter_id,
+                content_id,
+            };
+            return request({
+                url,
+                method,
+                header,
+                body,
+            });
+        }
     }
 }
 

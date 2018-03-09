@@ -3,17 +3,18 @@ import compose from 'ModelUtils/compose';
 import { Toast } from 'antd-mobile';
 import check from 'ModelUtils/check';
 import fetchSell from 'ModelUtils/fetchData';
+import Vconsole from 'vconsole'
 
 const { login, my } = api;
 const { telLogin } = login;
 const { info } = my;
 
-// import Vconsole from 'vconsole'
 
-// function initVconsole() {
-//   const Vcon = new Vconsole()
-//   return Vcon;
-// }
+
+function initVconsole() {
+  const Vcon = new Vconsole()
+  return Vcon;
+}
 
 const checker = {
   '100': function* (result, sagaEffects) {
@@ -96,7 +97,7 @@ export default {
   subscriptions: {
     setup({ dispatch, history }) {
       if (process.env.NODE_ENV  === 'development') {
-        // initVconsole();
+        initVconsole();
       }
       return history.listen((location) => {
         dispatch({
@@ -155,6 +156,10 @@ export default {
       fetchSell,
       checkLogin,
       check(checkUserInfo, networFail)
-    ])
+    ]),
+    *logout(action, { put }) {
+      localStorage.removeItem('token');
+      yield put({ type: 'changeLoginTofalse' });
+    }
   }
 };

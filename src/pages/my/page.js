@@ -3,6 +3,7 @@ import { connect } from 'dva';
 import router from 'umi/router';
 import Tabbar from 'Components/Tabbar';
 import Unlogin from './components/unlogin/index'
+import Login from './components/login/index'
 import Nav from 'Components/Navbar/index';
 import Load from 'Components/Load';
 import api from 'Utis/api';
@@ -14,7 +15,7 @@ function App(props) {
   return (
     <div className={styles.my}>
       <Nav title="我的" onLeftClick={props.goBack} />
-      {props.login ? 'login' :
+      {props.login ? <Login logout={props.logout} /> :
         <Unlogin
           inputChane={props.setNumber}
           onButtonClick={props.getCode}
@@ -38,6 +39,7 @@ class My extends React.Component {
     this.setCode = this.setCode.bind(this);
     this.getCode = this.getCode.bind(this);
     this.login = this.login.bind(this);
+    this.logout = this.logout.bind(this);
   }
   setNumber(number) {
     this.setState({
@@ -67,6 +69,11 @@ class My extends React.Component {
       code: _code
     });
   }
+  logout() {
+    this.props.dispatch({
+      type: 'global/logout',
+    });
+  }
   render() {
     return (
       <App
@@ -78,6 +85,7 @@ class My extends React.Component {
         code={this.state.code}
         getCode={this.getCode}
         loginMethod={this.login}
+        logout={this.logout}
       />
     )
   }

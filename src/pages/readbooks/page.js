@@ -5,6 +5,7 @@ import Load from 'Components/Load';
 import Nav from 'Components/Navbar/index';
 import Content from './components/content/index';
 import styles from './style.less';
+import api from 'Utis/api';
 
 
 
@@ -12,7 +13,13 @@ function ReadBooks(props) {
     return (
         <div className={styles.readbooksContainer} >
             <Nav title={props.title} onLeftClick={props.goBack} />
-            <div style={{ minHeight: document.documentElement.clientHeight}} className={styles.contentContainer} onClick={props.setLoaction}  >
+            <div
+                style={{ minHeight: document.documentElement.clientHeight}}
+                className={styles.contentContainer}
+                onClick={() => {
+                    props.setLoaction();
+                }} 
+            >
                 {props.showContent.map(element => (<Content
                     key={element.content_id}
                     id={element.content_id}
@@ -47,9 +54,13 @@ class App extends React.Component {
         this.goBack = this.goBack.bind(this);
         this.setLoaction = this.setLoaction.bind(this);
         this.readNext = this.readNext.bind(this);
+        this.report = this.report.bind(this);
         this.state = {
             location: 1
         }
+    }
+    componentDidMount() {
+        this.report();
     }
     // shouldComponentUpdate(nextProps, nextState) {
     //     return this.state.location !== nextState.location;
@@ -65,6 +76,9 @@ class App extends React.Component {
              }, () => {
                  // 将页面下拉到底部。
                 window.scrollTo(0,document.body.scrollHeight);
+                if (location % 3 === 0) {
+                    self.report();
+                }
              })
         } else {
             // 结束了则拉取下一章书的基本信息
@@ -102,6 +116,23 @@ class App extends React.Component {
             },
         });
     }
+    report() {
+        const { login, model } = this.props;
+        if (login) {
+            // console.log('reported!!');
+            const token = localStorage.getItem('token');
+            const time = Number.parseInt((+ new Date())/1000, 10);
+            const { chapter } = model;
+            const { ret } = chapter;
+            const chapterInfo = ret.chapter;
+            const { chapter_id, book_id } = chapterInfo;
+            const { location } = this.state;
+            const index = location - 1;
+            const { content } = ret;
+            const { content_id } = content[index]
+            api.report.readrecord(token, time, book_id, chapter_id, content_id);
+        }
+    }
     render() {
         const { model } = this.props;
         const { chapter, nextBookCover, nextBookName } = model
@@ -134,5 +165,6 @@ export default connect((state) => {
       loading: state.readbooks.loading,
       model: state.readbooks,
       globalLoading: state.global.loading,
+      login: state.global.login,
     };
   })(AppWithLoad);

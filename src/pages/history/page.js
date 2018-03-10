@@ -67,9 +67,6 @@ class App extends React.Component {
         document.querySelector('.am-list-view-scrollview').style.height = `${document.documentElement.clientHeight}px`;
         document.querySelector('.am-list-body').style.height = `${document.documentElement.clientHeight - 0.9 * Number.parseInt(document.documentElement.style.fontSize, 10)}px`;
     }
-    componentWillUpdate() {
-        console.log(23333)
-    }
     readbooks(id) {
         router.push({
             pathname: '/readbooks',

@@ -11,7 +11,7 @@ export default function BookItem(props) {
             <div className={styles.nameAndButton} >
                 <div className={styles.name} >{bookName}</div>
                 <div className={styles.see} >
-                <Button onClick={() => read(bookId)} type="primary" >观看本书</Button>
+                <Button onClick={() => read(bookId)} type="primary" >继续观看</Button>
                 </div>
             </div>
         </div>

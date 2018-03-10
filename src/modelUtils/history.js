@@ -35,18 +35,6 @@ const model = {
     checkHistory: check(compose([
         checkCode,
         {
-            // *success(result, sagaEffects) {
-            //     const { put } = sagaEffects;
-            //     const { data } = result;
-            //     const _data = data.data;
-            //     const { ret } = _data;
-            //     if (ret.length > 0) {
-            //         yield put({ type: 'saveHistory', history: ret });
-            //         yield put({ type: 'changeInit' });
-            //     }   else {
-            //         Toast.info('没有更多历史记录了', 0.5);
-            //     }
-            // },
             success,
             *fail(result, sagaEffects) {
                 yield goBack();

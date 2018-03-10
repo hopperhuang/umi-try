@@ -5,6 +5,7 @@ import fetchShell from './fetchData';
 import compose from './compose';
 import api from 'Utis/api';
 import check from './check';
+import checkCode from './checkCode';
 
 const { detail } = api;
 const { allChapter, chapterContent, bookDetail } = detail;
@@ -56,15 +57,18 @@ export const readbooksModel = {
     nextChecker: check(compose([getNextSuccess, getNextDetail]), networkFail),
     getBookDeatil(next) {
         return function* (action, sagaEffects) {
-            const { bookId } = action;
-            const { call, select } = sagaEffects;
-            // 检查全局缓存是否有相应的detail信息
-            const global = yield select(state => state.global);
-            const AllBookDetailInfo = global.detail
-            const targetDetail= AllBookDetailInfo[bookId];
-            let detail;
-            if (targetDetail) {
-                detail = targetDetail
+            const { bookId, history } = action;
+            // const { call, select } = sagaEffects;
+            const { call } = sagaEffects;
+            let detail
+            if (history) {
+                const token = localStorage.getItem('token')
+                if (token) {
+                    detail = yield call(bookDetail, bookId, token)
+                }   else {
+                    router.push('/my');
+                    Toast.info('想从上次的位置观看吗？请先登录');
+                }
             }   else {
                 detail = yield call(bookDetail, bookId);
             }
@@ -171,9 +175,10 @@ export default {
             const { pathname, query } = location;
             // 从首页入口进入初始化
             if (pathname === '/readbooks') {
-                const { id, chapterId } = query;
-                // 只存在bookId, 不存在chapterId
-                if (!!id && !chapterId) {
+                const { id, chapterId, history } = query;
+                // 只存在bookId, 不存在chapterId, 不存在history
+                if (!!id && !chapterId && !history) {
+                    console.log(233)
                     dispatch({
                         type: 'fetchData',
                         id,
@@ -185,6 +190,13 @@ export default {
                         chapterId,
                         bookType: 'current',
                     });
+                }   else if(!!id && !!history) {
+                    console.log(55555)
+                    dispatch({
+                        type: 'fetchWithHistory',
+                        bookId: id,
+                        history: true,
+                    })
                 }   else { // 参数错误，返回首页。
                     router.push('/');
                     Toast.info('参数错误');
@@ -200,6 +212,10 @@ export default {
         saveNext(state, action) {
             const { chapterId, bookId, bookCover, bookName } = action;
             return { ...state, nextBookId: bookId, nextChapterId: chapterId, nextBookCover: bookCover, nextBookName: bookName };
+        },
+        saveLocation(state, action) {
+            const { location } = action;
+            return { ...state, location };
         }
     },
     effects: {
@@ -217,6 +233,47 @@ export default {
             fetchShell,
             readbooksModel.fetchChapter,
             readbooksModel.fetchChapterChecker,
+        ]),
+        fetchWithHistory: compose([
+            fetchShell,
+            readbooksModel.getBookDeatil,
+            check(
+                checkCode({
+                    *success(result, sagaEffects) {
+                        const { data } = result;
+                        const detail = data.data;
+                        const { user_chapter_id, user_content_id, book_id } = detail;
+                        // 尚未阅读过
+                        if (user_chapter_id === 0 && user_content_id === 0) {
+                            // 重定向到书本第一张
+                            router.push({
+                                pathname: '/readbooks',
+                                query: {
+                                    id: book_id,
+                                },
+                            });
+                            Toast.info('你尚未阅读过该书本，从第一章从新读起吧')
+                        }   else {
+                            yield compose([readbooksModel.fetchChapter, readbooksModel.fetchChapterChecker])({
+                                bookId: book_id,
+                                chapterId: user_chapter_id,
+                                bookType: 'current',
+                            }, sagaEffects)
+                            // 将这部分转移到页面逻辑里面，因为location并不属于model层的逻辑，而是属于页面的逻辑
+                            const { select, put } = sagaEffects;
+                            const readbooks = yield select(state => state.readbooks);
+                            const { chapter } =readbooks;
+                            const { ret } = chapter;
+                            const { content } = ret;
+                            const location = content.findIndex(element => element.content_id === Number.parseInt(user_content_id, 10));
+                            yield put({ type: 'saveLocation', location: location + 1 });
+                        }
+                    },
+                    fail() {
+                        router.push('/my');
+                        Toast.info('登录过期了，想从上次阅读位置继续看吗，请先登录');
+                    }
+                }), networkFail)
         ])
     }
 }

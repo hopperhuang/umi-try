@@ -60,7 +60,12 @@ class App extends React.Component {
         }
     }
     componentDidMount() {
-        this.report();
+        const { model } = this.props;
+        const { location } = model;
+        console.log(location)
+        if (location === 1) {
+            this.report();
+        }
     }
     // shouldComponentUpdate(nextProps, nextState) {
     //     return this.state.location !== nextState.location;

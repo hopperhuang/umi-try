@@ -36,12 +36,16 @@ const model = {
         checkCode,
         {
             *success(result, sagaEffects) {
-                yield console.log(result);
-                yield console.log('success');
+                const { put } = sagaEffects;
                 const { data } = result;
                 const _data = data.data;
                 const { ret } = _data;
-                console.log(ret);
+                if (ret.length > 0) {
+                    yield put({ type: 'saveHistory', history: ret });
+                    yield put({ type: 'changeInit' });
+                }   else {
+                    Toast.info('没有更多历史记录了', 0.5);
+                }
             },
             *fail(result, sagaEffects) {
                 yield goBack();
@@ -64,6 +68,7 @@ export default {
     namespace: 'history',
     state: {
         page: 0,
+        history: [],
     },
     subscriptions: {
         setup: subscribePath('/history', (dispatch, history, location) => {
@@ -72,9 +77,33 @@ export default {
             })
         })
     },
+    reducers: {
+        saveHistory(state, action) {
+            const { history } = action;
+            const { page } = state;
+            const newPage = page + 1;
+            const newHistory = state.history.concat(history);
+            return { ...state, page: newPage, history: newHistory };
+        }
+    },
     effects: {
         getHistory: compose([
+            (next) => {
+                return function* (action, sagaEffects) {
+                    const { select } = sagaEffects;
+                    const history = yield select(state => state.history);
+                    const { init } = history;
+                    // 尚未初始化则获取数据
+                    if (!init) {
+                        yield next(action, sagaEffects);
+                    }
+                };
+            },
             fetchShell,
+            model.getHistory,
+            model.checkHistory,
+        ]),
+        getMore: compose([
             model.getHistory,
             model.checkHistory,
         ]),

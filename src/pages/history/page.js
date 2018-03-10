@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { connect } from 'dva';
 import router from 'umi/router';
-import { ListView } from 'antd-mobile';
+import { ListView, PullToRefresh } from 'antd-mobile';
 import Load from 'Components/Load';
 import Nav from 'Components/Navbar/index';
 import BookItem from './components/bookitem/index';
@@ -23,6 +23,7 @@ function History(props) {
     // console.log(props)
     const { history } = props;
     const data = history.history;
+    const { refreshing } = history;
     const dataSource = DataSource(data)
     return (
         <div>
@@ -43,6 +44,7 @@ function History(props) {
                     initialListSize={4}
                     height={document.documentElement.clientHeight}
                     onEndReached={props.getMore}
+                    pullToRefresh={<PullToRefresh refreshing={refreshing} onRefresh={props.refresh} />}
                 />
             </div>
 
@@ -56,6 +58,7 @@ class App extends React.Component {
         this.goBack = this.goBack.bind(this);
         this.readbooks = this.readbooks.bind(this);
         this.getMore = this.getMore.bind(this);
+        this.refresh = this.refresh.bind(this)
     }
     goBack() {
         router.push('/my');
@@ -80,6 +83,11 @@ class App extends React.Component {
             type: 'history/getMore'
         });
     }
+    refresh() {
+        this.props.dispatch({
+            type: 'history/refreshing'
+        });
+    }
     render() {
         return (
             <History
@@ -87,6 +95,7 @@ class App extends React.Component {
                 goBack={this.goBack}
                 readbooks={this.readbooks}
                 getMore={this.getMore}
+                refresh={this.refresh}
             />
         )
     }

@@ -35,23 +35,37 @@ const model = {
     checkHistory: check(compose([
         checkCode,
         {
-            *success(result, sagaEffects) {
-                const { put } = sagaEffects;
-                const { data } = result;
-                const _data = data.data;
-                const { ret } = _data;
-                if (ret.length > 0) {
-                    yield put({ type: 'saveHistory', history: ret });
-                    yield put({ type: 'changeInit' });
-                }   else {
-                    Toast.info('没有更多历史记录了', 0.5);
-                }
-            },
+            // *success(result, sagaEffects) {
+            //     const { put } = sagaEffects;
+            //     const { data } = result;
+            //     const _data = data.data;
+            //     const { ret } = _data;
+            //     if (ret.length > 0) {
+            //         yield put({ type: 'saveHistory', history: ret });
+            //         yield put({ type: 'changeInit' });
+            //     }   else {
+            //         Toast.info('没有更多历史记录了', 0.5);
+            //     }
+            // },
+            success,
             *fail(result, sagaEffects) {
                 yield goBack();
             },
         }
     ]), networkFail),
+}
+
+function* success(result, sagaEffects) {
+    const { put } = sagaEffects;
+    const { data } = result;
+    const _data = data.data;
+    const { ret } = _data;
+    if (ret.length > 0) {
+        yield put({ type: 'saveHistory', history: ret });
+        yield put({ type: 'changeInit' });
+    }   else {
+        Toast.info('没有更多历史记录了', 0.5);
+    }
 }
 
 // function logger(action, sagaEffects) {
@@ -69,6 +83,7 @@ export default {
     state: {
         page: 0,
         history: [],
+        refreshing: false,
     },
     subscriptions: {
         setup: subscribePath('/history', (dispatch, history, location) => {
@@ -84,6 +99,9 @@ export default {
             const newPage = page + 1;
             const newHistory = state.history.concat(history);
             return { ...state, page: newPage, history: newHistory };
+        },
+        initHistory(state, action){
+            return { ...state, page: 0, history: [] };
         }
     },
     effects: {
@@ -103,9 +121,28 @@ export default {
             model.getHistory,
             model.checkHistory,
         ]),
-        getMore: compose([
+        getMore: [
+            compose([
             model.getHistory,
             model.checkHistory,
-        ]),
+            ]),
+            {
+                type: 'takeLatest',
+                ms: 2000,
+            }
+        ],
+        refreshing: compose([
+            (next) => {
+                return function* (action, sagaEffects) {
+                    const { put } = sagaEffects;
+                    yield put({ type: 'changeRefreshing' });
+                    yield put({ type: 'initHistory' });
+                    yield next(action, sagaEffects);
+                    yield put({ type: 'changeRefreshing' });
+                }
+            },
+            model.getHistory,
+            model.checkHistory,
+        ])
     }
 }

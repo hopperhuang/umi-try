@@ -248,7 +248,7 @@ export default {
                         if (user_chapter_id === 0 && user_content_id === 0) {
                             // 重定向到书本第一张
                             router.push({
-                                pathname: '/readbooks',
+                                pathname: '/catalog',
                                 query: {
                                     id: book_id,
                                 },

@@ -162,6 +162,7 @@ class App extends React.Component {
     render() {
         const { model } = this.props;
         const { chapter, nextBookCover, nextBookName } = model
+        // console.log(model)
         const { ret } = chapter;
         const chapterInfo = ret.chapter;
         const title = `${chapterInfo.chapter_name}章`;

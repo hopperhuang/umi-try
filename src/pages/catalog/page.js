@@ -44,6 +44,7 @@ class Pages extends React.Component {
     render() {
         const { model } = this.props;
         const { chapters } = model;
+        // console.log(model);
         return (
             <Catalog {...this.props} goBack={this.goBack} chapters={chapters} readBook={this.readBook} />
         )

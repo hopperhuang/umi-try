@@ -23,6 +23,9 @@ function* saveData(chapters, sagaEffects) {
 
 export default {
     namespace: 'catalog',
+    state: {
+        chapters: [],
+    },
     subscriptions: {
         setup: subscribePath('/catalog', (dispatch, history, location) => {
             const { query } = location;
@@ -38,6 +41,7 @@ export default {
     reducers: {
         saveData(state, action) {
             const { chapters } = action;
+            // console.log(state.loading);
             return { ...state, chapters };
         }
     },

@@ -59,12 +59,32 @@ class App extends React.Component {
             location: 1
         }
     }
+    componentWillMount() {
+        const { model, global, location } = this.props;
+        const { history, id } = location.query
+        if (history) {  // 历史记录计入则定位到content_id
+            // 从model获取章节内容
+            const { chapter } = model;
+            const { ret } = chapter;
+            const { content } = ret;
+            // 从detail获取content_id
+            const { detail } = global;
+            const bookDetail = detail[id];
+            const _data = bookDetail.data;
+            const { data } = _data;
+            const {user_content_id } = data;
+            const location = content.findIndex(element => element.content_id === Number.parseInt(user_content_id, 10)) + 1;
+            this.setState({ location });
+        }
+    }
     componentDidMount() {
-        const { model } = this.props;
-        const { location } = model;
-        console.log(location)
-        if (location === 1) {
+        const { location } = this.props;
+        const { history } = location.query
+        // 非历史记录进入则上报
+        if (!history) {
             this.report();
+        } else {
+            window.scrollTo(0,document.body.scrollHeight);
         }
     }
     // shouldComponentUpdate(nextProps, nextState) {
@@ -113,13 +133,14 @@ class App extends React.Component {
           })
     }
     goBack() {
-        const { id } = this.props.location.query;
-        router.push({
-            pathname: '/catalog',
-            query: {
-                id,
-            },
-        });
+        // const { id } = this.props.location.query;
+        // router.push({
+        //     pathname: '/catalog',
+        //     query: {
+        //         id,
+        //     },
+        // });
+        router.goBack();
     }
     report() {
         const { login, model } = this.props;
@@ -171,5 +192,6 @@ export default connect((state) => {
       model: state.readbooks,
       globalLoading: state.global.loading,
       login: state.global.login,
+      global: state.global,
     };
   })(AppWithLoad);

@@ -178,7 +178,6 @@ export default {
                 const { id, chapterId, history } = query;
                 // 只存在bookId, 不存在chapterId, 不存在history
                 if (!!id && !chapterId && !history) {
-                    console.log(233)
                     dispatch({
                         type: 'fetchData',
                         id,
@@ -191,7 +190,6 @@ export default {
                         bookType: 'current',
                     });
                 }   else if(!!id && !!history) {
-                    console.log(55555)
                     dispatch({
                         type: 'fetchWithHistory',
                         bookId: id,
@@ -236,13 +234,16 @@ export default {
         ]),
         fetchWithHistory: compose([
             fetchShell,
+            // 获取书本详细信息，用于获取contentid 和 chapterid
             readbooksModel.getBookDeatil,
             check(
                 checkCode({
                     *success(result, sagaEffects) {
+                        const { put } =  sagaEffects;
                         const { data } = result;
                         const detail = data.data;
                         const { user_chapter_id, user_content_id, book_id } = detail;
+                        yield put({ type: 'global/saveDetail', id: book_id, detail: result });
                         // 尚未阅读过
                         if (user_chapter_id === 0 && user_content_id === 0) {
                             // 重定向到书本第一张
@@ -254,19 +255,12 @@ export default {
                             });
                             Toast.info('你尚未阅读过该书本，从第一章从新读起吧')
                         }   else {
+                            // 根据chapterId获取书本
                             yield compose([readbooksModel.fetchChapter, readbooksModel.fetchChapterChecker])({
                                 bookId: book_id,
                                 chapterId: user_chapter_id,
                                 bookType: 'current',
                             }, sagaEffects)
-                            // 将这部分转移到页面逻辑里面，因为location并不属于model层的逻辑，而是属于页面的逻辑
-                            const { select, put } = sagaEffects;
-                            const readbooks = yield select(state => state.readbooks);
-                            const { chapter } =readbooks;
-                            const { ret } = chapter;
-                            const { content } = ret;
-                            const location = content.findIndex(element => element.content_id === Number.parseInt(user_content_id, 10));
-                            yield put({ type: 'saveLocation', location: location + 1 });
                         }
                     },
                     fail() {

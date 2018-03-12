@@ -83,13 +83,26 @@ export default {
     reducers: {
         saveHistory(state, action) {
             const { history } = action;
-            const { page } = state;
-            const newPage = page + 1;
-            const newHistory = state.history.concat(history);
-            return { ...state, page: newPage, history: newHistory };
+            if (state.refreshing) {
+                return {
+                    ...state,
+                    history,
+                    page: 1,
+                    init: true,
+                }
+            }   else {
+                const { page } = state;
+                const newPage = page + 1;
+                const newHistory = state.history.concat(history);
+                return { ...state, page: newPage, history: newHistory };
+            }
+            
         },
         initHistory(state, action){
-            return { ...state, page: 0, history: [] };
+            return { ...state, page: 0, init: false };
+        },
+        changeRefreshing(state, action) {
+            return { ...state, refreshing: !state.refreshing };
         }
     },
     effects: {

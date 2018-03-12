@@ -71,7 +71,8 @@ class App extends React.Component {
         router.push({
             pathname: '/readbooks',
             query: {
-                id
+                id,
+                history: 1,
             },
         })
     }

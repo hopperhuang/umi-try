@@ -1,3 +1,4 @@
+import '/usr/local/lib/node_modules/umi/node_modules/_umi-build-dev@0.12.1@umi-build-dev/lib/plugins/hd/template/index.js';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import createHistory from 'umi/_createHistory';

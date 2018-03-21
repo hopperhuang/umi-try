@@ -27,7 +27,7 @@ export default {
         chapters: [],
     },
     subscriptions: {
-        setup: subscribePath('/catalog', (dispatch, history, location) => {
+        setup: subscribePath('/catalog.html', (dispatch, history, location) => {
             const { query } = location;
             const { id } = query;
             if (!!id) {

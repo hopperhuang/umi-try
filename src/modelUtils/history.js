@@ -74,7 +74,7 @@ export default {
         refreshing: false,
     },
     subscriptions: {
-        setup: subscribePath('/history', (dispatch, history, location) => {
+        setup: subscribePath('/history.html', (dispatch, history, location) => {
             dispatch({
                 type: 'getHistory',
             })

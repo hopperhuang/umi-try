@@ -13,6 +13,7 @@ export default {
         ModelUtils: path.resolve(__dirname, 'src/modelUtils/'),
         Components: path.resolve(__dirname, 'src/components/'),
     },
+    publicPath: '/static/',
     env: {
         production: {
             externals: {

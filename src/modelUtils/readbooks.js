@@ -174,7 +174,7 @@ export default {
         setup: subscriptions((dispatch, history, location) => {
             const { pathname, query } = location;
             // 从首页入口进入初始化
-            if (pathname === '/readbooks') {
+            if (pathname === '/readbooks.html') {
                 const { id, chapterId, history } = query;
                 // 只存在bookId, 不存在chapterId, 不存在history
                 if (!!id && !chapterId && !history) {
